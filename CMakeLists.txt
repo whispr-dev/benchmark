@@ -6,14 +6,12 @@ option(RNG_BENCH_ENABLE_MARCH_NATIVE "Enable -march=native" ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# --- Compiler configuration ---
 if (MSVC)
-  set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNOMINMAX /MD /EHsc" CACHE STRING "Release flags" FORCE)
-  string(REGEX REPLACE "/RTC(su|[1su])" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    add_compile_options(/O2 /DNOMINMAX /EHsc)
 else()
-  add_compile_options(-O3 -fno-exceptions -fno-rtti)
-  if (RNG_BENCH_ENABLE_MARCH_NATIVE)
-    add_compile_options(-march=native)
-  endif()
+    # For GCC/Clang (MinGW, Linux, etc.)
+    add_compile_options(-O3 -std=gnu++20 -march=native -fexceptions -frtti -DNOMINMAX)
 endif()
 
 add_executable(rng_bench

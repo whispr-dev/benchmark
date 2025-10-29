@@ -1,0 +1,86 @@
+🧰 1️⃣ Install dependencies
+
+For Ubuntu/Debian-based systems (DragonOS, Lubuntu, etc.):
+
+sudo apt update
+sudo apt install -y build-essential cmake ninja-build clang
+
+
+That gives you:
+
+GCC (gcc, g++)
+
+Clang (clang, clang++)
+
+CMake
+
+Ninja
+
+🧱 2️⃣ Create clean build directories
+cd ~/code/benchmark
+rm -rf build-gcc build-clang
+mkdir -p results
+
+🧩 3️⃣ GCC build and run
+# Configure & build
+cmake -B build-gcc -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+
+# Compile with native optimizations
+cmake --build build-gcc -j$(nproc)
+
+# Run benchmark
+./build-gcc/rng_bench --threads $(nproc) --total 200000000 --csv results/bench_all_linux-gcc.csv
+
+🧠 4️⃣ Clang build and run
+# Configure & build
+cmake -B build-clang -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+
+# Compile
+cmake --build build-clang -j$(nproc)
+
+# Run benchmark
+./build-clang/rng_bench --threads $(nproc) --total 200000000 --csv results/bench_all_linux-clang.csv
+
+🧪 5️⃣ Verify results
+ls -l results/bench_all_linux-*.csv
+
+
+You should see:
+
+results/bench_all_linux-gcc.csv
+results/bench_all_linux-clang.csv
+
+🧠 6️⃣ Optional: specify SIMD library (for your CSIMD build)
+
+If you’ve got your SIMD RNG shared library built and available, e.g.:
+
+/home/wofl/C-SIMD-RNG-Lib/lib_files/linux_shared/libuniversal_rng.so
+
+
+Then add this flag:
+
+--csimd-lib /home/wofl/C-SIMD-RNG-Lib/lib_files/linux_shared/libuniversal_rng.so
+
+
+Example:
+
+./build-gcc/rng_bench --threads $(nproc) --total 200000000 \
+  --csimd-lib /home/wofl/C-SIMD-RNG-Lib/lib_files/linux_shared/libuniversal_rng.so \
+  --csv results/bench_all_linux-gcc_csimd.csv
+
+🧾 7️⃣ Summary of what you’ll end up with
+results/
+├─ bench_all_windows-msvc.csv
+├─ bench_all_windows-msys2.csv
+├─ bench_all_linux-gcc.csv
+├─ bench_all_linux-clang.csv
+└─ (optional) bench_all_linux-gcc_csimd.csv
+
+🔜 What Comes Next
+Once those Linux CSVs are captured, we’ll:
+Merge all results automatically.
+Generate the cross-compiler, cross-OS dashboard:
+GCC vs Clang vs MSVC vs MinGW performance deltas
+Throughput vs Quality
+Relative advantage bar charts (speedup multipliers)
+Add a “Performance Delta (%) vs MSVC baseline” panel.
