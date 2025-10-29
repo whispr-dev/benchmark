@@ -1,0 +1,2 @@
+generator,u64_ops_per_s,f64_ops_per_s,mean_f64,var_f64,chi2_bytes,threads,total_u64,total_f64
+xoroshiro128pp,519370014.534570,532638975.667741,0.500004,0.083331,275.682440,12,199999992,199999992

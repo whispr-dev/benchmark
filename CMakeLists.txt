@@ -20,8 +20,17 @@ add_executable(rng_bench
   src/main.cpp
 )
 
-target_include_directories(rng_bench PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(rng_bench PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/competitors
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/competitors/sfmt
+)
 
 if (WIN32)
   target_link_libraries(rng_bench PRIVATE ws2_32)
+endif()
+
+file(GLOB_RECURSE COMPETITOR_C "${CMAKE_CURRENT_SOURCE_DIR}/include/competitors/*.c")
+if (COMPETITOR_C)
+  target_sources(rng_bench PRIVATE ${COMPETITOR_C})
 endif()

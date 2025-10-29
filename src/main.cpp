@@ -17,9 +17,17 @@
 #include "rng_splitmix64.h"
 #include "rng_pcg32.h"
 #include "rng_xoroshiro128pp.h"
-// #include "rng_xoshiro256ss.h"
+#include "rng_xoroshiro256ss.h"
 #include "rng_std_wrappers.h"
 #include "rng_csimd_dynamic.h"
+// #include "competitors/simdxorshift_adapter.h"
+// if (wants("simdxorshift"))
+//     results.push_back(run_bench_fixed<simdxorshift_adapter>("simdxorshift", cmd));
+// #include "competitors/xoshiro256plussimd_adapter.h"
+// if (wants("xoshiro256plussimd"))
+//     results.push_back(run_bench_fixed<xoshiro256plussimd_adapter>("xoshiro256plussimd", cmd));
+#include "competitors/sfmt_adapter.h"
+
 
 struct BenchResult {
   std::string name;

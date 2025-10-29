@@ -1,0 +1,2 @@
+generator,u64_ops_per_s,f64_ops_per_s,mean_f64,var_f64,chi2_bytes,threads,total_u64,total_f64
+minstd_rand,626324275.700963,738106354.856085,0.249987,0.020834,100066219.337643,12,199999992,199999992

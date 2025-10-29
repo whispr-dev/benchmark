@@ -1,0 +1,4 @@
+# ninja log v6
+8	387	7834178411889617	build.ninja	efcc4ad874c44f40
+4	3153	7834184605698334	CMakeFiles/rng_bench.dir/src/main.cpp.obj	31ba0f6e33ca3617
+3155	3496	7834184637206535	rng_bench.exe	878c61e93b631ec7

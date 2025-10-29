@@ -1,0 +1,2 @@
+generator,u64_ops_per_s,f64_ops_per_s,mean_f64,var_f64,chi2_bytes,threads,total_u64,total_f64
+pcg32,350175788.106755,387719454.914889,0.499995,0.083335,277.801208,12,199999992,199999992

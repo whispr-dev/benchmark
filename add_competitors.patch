@@ -1,0 +1,51 @@
+diff --git a/src/main.cpp b/src/main.cpp
+@@
+ #include "rng_std_mt19937.h"
+ #include "rng_pcg32.h"
+ #include "rng_xoroshiro128pp.h"
+ #include "rng_xoshiro256pp.h"
++#include "competitors/simdxorshift_adapter.h"
++#include "competitors/xoshiro256plussimd_adapter.h"
++#include "competitors/sfmt_adapter.h"
+
+@@
+     if (wants("std_mt19937"))
+         results.push_back(run_bench_fixed<std_mt19937_adapter>("std_mt19937", cmd));
+     if (wants("pcg32"))
+         results.push_back(run_bench_fixed<pcg32_adapter>("pcg32", cmd));
+     if (wants("xoroshiro128pp"))
+         results.push_back(run_bench_fixed<xoroshiro128pp_adapter>("xoroshiro128pp", cmd));
+     if (wants("xoshiro256pp"))
+         results.push_back(run_bench_fixed<xoshiro256pp_adapter>("xoshiro256pp", cmd));
++
++    if (wants("simdxorshift"))
++        results.push_back(run_bench_fixed<simdxorshift_adapter>("simdxorshift", cmd));
++
++    if (wants("xoshiro256plussimd"))
++        results.push_back(run_bench_fixed<xoshiro256plussimd_adapter>("xoshiro256plussimd", cmd));
++
++    if (wants("sfmt"))
++        results.push_back(run_bench_fixed<sfmt_adapter>("sfmt", cmd));
++
++    // UA RNG dynamic library (runtime-loaded)
++    if (wants("csimd"))
++        results.push_back(run_bench_shared("csimd_universal", cmd)); // expects --csimd-lib and related args
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+@@
+ add_executable(rng_bench
+   src/main.cpp
+ )
+
+ target_include_directories(rng_bench PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+ if (WIN32)
+   target_link_libraries(rng_bench PRIVATE ws2_32)
+ endif()
++
++# Automatically compile any C competitor .c sources (like SFMT)
++file(GLOB_RECURSE COMPETITOR_C "${CMAKE_CURRENT_SOURCE_DIR}/include/competitors/*.c")
++if (COMPETITOR_C)
++  target_sources(rng_bench PRIVATE ${COMPETITOR_C})
++endif()
++
++message(STATUS "Competitor sources: ${COMPETITOR_C}")

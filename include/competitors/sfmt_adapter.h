@@ -2,7 +2,10 @@
 // sfmt_adapter.h
 // Adapter for SFMT. Place SFMT headers/c sources at include/competitors/sfmt/
 extern "C" {
-#include "SFMT.h"
+#ifndef SFMT_MEXP
+#define SFMT_MEXP 19937
+#endif
+#include "competitors/sfmt/SFMT.h"
 }
 
 struct sfmt_adapter {
