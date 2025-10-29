@@ -1,0 +1,10 @@
+^D:\CODE\BENCHMARK\BUILD-MSVC\CMAKEFILES\B12A9EE0A0AA871B2EDF9291A4E437A8\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/code/benchmark -BD:/code/benchmark/build-msvc --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/code/benchmark/build-msvc/rng_bench.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

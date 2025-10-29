@@ -10,8 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (MSVC)
     add_compile_options(/O2 /DNOMINMAX /EHsc)
 else()
-    # For GCC/Clang (MinGW, Linux, etc.)
-    add_compile_options(-O3 -std=gnu++20 -march=native -fexceptions -frtti -DNOMINMAX)
+    # For GCC/Clang (Linux, MinGW, etc.)
+    add_compile_options(-O3 -std=gnu++20 -march=native -mavx2 -mfma -mbmi2 -fexceptions -frtti -DNOMINMAX)
 endif()
 
 add_executable(rng_bench

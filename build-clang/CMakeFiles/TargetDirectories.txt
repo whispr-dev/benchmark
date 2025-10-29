@@ -1,0 +1,3 @@
+/mnt/d/code/benchmark/build-clang/CMakeFiles/rng_bench.dir
+/mnt/d/code/benchmark/build-clang/CMakeFiles/edit_cache.dir
+/mnt/d/code/benchmark/build-clang/CMakeFiles/rebuild_cache.dir
