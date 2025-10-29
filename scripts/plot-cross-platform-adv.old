@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""
+plot-cross-platform-adv.py — Clean Layout Version
+Generates SIMD RNG benchmark comparison plots across platforms.
+Outputs PDF, PNG, and SVG with proper spacing and readable labels.
+"""
+import argparse, os, pandas as pd, numpy as np, seaborn as sns
+import matplotlib
+matplotlib.use("pdf")
+import matplotlib.pyplot as plt
+
+parser = argparse.ArgumentParser(description="Cross-platform SIMD RNG benchmark visualizer.")
+parser.add_argument("--baseline", default="windows-msvc")
+parser.add_argument("--output", default="results/cross_compiler_full_report.pdf")
+parser.add_argument("--multi-panel", action="store_true")
+parser.add_argument("--style", default="paper")
+parser.add_argument("--top3-table", action="store_true")
+args = parser.parse_args()
+
+baseline, output = args.baseline, args.output
+out_dir = os.path.dirname(output) or "results"
+os.makedirs(out_dir, exist_ok=True)
+
+# --- Style ---
+if args.style == "paper":
+    sns.set_theme(style="whitegrid", font_scale=1.1)
+    plt.rcParams.update({
+        "font.family": "DejaVu Sans",
+        "axes.titlesize": 13,
+        "axes.labelsize": 11,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 9,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    })
+elif args.style == "dark":
+    sns.set_theme(style="darkgrid", font_scale=1.1)
+else:
+    sns.set_theme(style="whitegrid", font_scale=1.0)
+
+# --- Load CSVs ---
+frames = []
+for f in os.listdir("results"):
+    if f.startswith("bench_all_") and f.endswith(".csv"):
+        df = pd.read_csv(os.path.join("results", f))
+        df["platform"] = f.replace("bench_all_", "").replace(".csv", "")
+        frames.append(df)
+if not frames:
+    raise SystemExit("No results found.")
+df = pd.concat(frames, ignore_index=True)
+
+# --- Baseline merge ---
+if baseline not in df["platform"].unique():
+    raise SystemExit(f"Baseline '{baseline}' not found.")
+base = df[df["platform"] == baseline][["generator", "u64_ops_per_s", "f64_ops_per_s"]]
+base = base.rename(columns={"u64_ops_per_s": "base_u64", "f64_ops_per_s": "base_f64"})
+merged = df.merge(base, on="generator", how="left")
+merged["speedup_u64"] = 100 * ((merged["u64_ops_per_s"] / merged["base_u64"]) - 1)
+merged["speedup_f64"] = 100 * ((merged["f64_ops_per_s"] / merged["base_f64"]) - 1)
+merged["mean_delta_%"] = 100 * np.abs(merged["mean_f64"] - 0.5) / 0.5
+merged["var_delta_%"] = 100 * np.abs(merged["var_f64"] - 0.0833333) / 0.0833333
+
+# --- Plotting helpers ---
+def tidy_labels(ax):
+    ax.set_xlabel("")
+    ax.tick_params(axis="x", rotation=30, labelsize=8)
+    ax.grid(True, linestyle="--", alpha=0.4)
+
+def make_multi_panel(data, outfile):
+    # Increased vertical space and top margin to prevent overlap
+    fig, axes = plt.subplots(2, 2, figsize=(13, 8))
+    title_text = f"Cross-Platform SIMD RNG Performance — Baseline: {baseline}"
+
+    # More breathing room between panels
+    fig.subplots_adjust(
+        top=0.84,   # lower title a bit
+        bottom=0.08,
+        left=0.07,
+        right=0.98,
+        hspace=0.55,  # more vertical space between rows
+        wspace=0.25
+    )
+
+    plots = [
+        ("u64_ops_per_s", "U64 Throughput (Mops/s)", axes[0, 0]),
+        ("f64_ops_per_s", "F64 Throughput (Mops/s)", axes[0, 1]),
+        ("speedup_u64", "Speedup vs Baseline (%)", axes[1, 0]),
+        ("var_delta_%", "Δ Variance (%)", axes[1, 1]),
+    ]
+
+    for y, title, ax in plots:
+        sns.barplot(data=data, x="generator", y=y, hue="platform", ax=ax, errorbar=None)
+        ax.set_title(title, pad=10)  # pad gives extra gap from bars
+        ax.tick_params(axis="x", rotation=30, labelsize=8)
+        ax.grid(True, linestyle="--", alpha=0.4)
+        ax.legend_.remove()
+
+    # Shared legend cleanly above all plots
+    handles, labels = axes[0, 0].get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        loc="upper center",
+        ncol=6,
+        frameon=False,
+        fontsize=9,
+        bbox_to_anchor=(0.5, 0.965)
+    )
+
+    # Title moved slightly down to avoid overlap with legend
+    fig.text(
+        0.5, 0.905, title_text,
+        ha="center", va="center",
+        fontsize=15, fontweight="bold"
+    )
+
+    fig.savefig(outfile, bbox_inches="tight")
+    print(f"[OK] Saved dashboard to {outfile}")
+
+
+def top3_table(data):
+    lines = [
+        "\\begin{tabular}{lccc}",
+        "\\toprule",
+        "Platform & RNG & u64 ops/s & Speedup(%) \\\\ \\midrule",
+    ]
+    for p, g in data.groupby("platform"):
+        for _, r in g.nlargest(3, "u64_ops_per_s").iterrows():
+            lines.append(f"{p} & {r['generator']} & {r['u64_ops_per_s']:.1f} & {r['speedup_u64']:.1f} \\\\")
+        lines.append("\\midrule")
+    lines.append("\\bottomrule\\end{tabular}")
+    tex_path = os.path.join(out_dir, "top3_table.tex")
+    with open(tex_path, "w") as f:
+        f.write("\n".join(lines))
+    print(f"[OK] Wrote Top-3 table LaTeX to {tex_path}")
+
+# --- Main ---
+if args.multi_panel:
+    make_multi_panel(merged, output)
+else:
+    g = sns.catplot(data=merged, x="generator", y="speedup_u64", hue="platform", kind="bar", height=6, aspect=1.6)
+    g.set_xticklabels(rotation=30)
+    plt.title(f"Speedup vs Baseline ({baseline})")
+    plt.tight_layout()
+    plt.savefig(output, bbox_inches="tight")
+    print(f"[OK] Saved simple chart to {output}")
+
+if args.top3_table:
+    top3_table(merged)
+
+# --- Export clean copies ---
+base, _ = os.path.splitext(output)
+plt.savefig(base + ".png", dpi=300, bbox_inches="tight")
+plt.savefig(base + ".svg", bbox_inches="tight")
+print("[OK] Exported PNG and SVG")

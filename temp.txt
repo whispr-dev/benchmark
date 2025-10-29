@@ -1,3 +1,0 @@
-.\build-msvc\Release\rng_bench.exe --threads 8 --total 200000000 `
-  --csimd-lib "D:\code\C-SIMD-RNG-Lib\v1.7\build\release\ua_rng.dll" `
-  --csv results\bench_all_windows-msvc_csimd_v1_7.csv
