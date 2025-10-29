@@ -1,0 +1,14 @@
+Name,Repo URL,Language,Algorithms Supported,Vector/ISA Support,License,Status,Notes
+SIMDxorshift,https://github.com/lemire/SIMDxorshift,C,xorshift128+,SSE2/AVX2/AVX512,Apache-2.0,Active,Fast demo-level SIMD RNG for integers; quality warning by author
+Xoshiro256PlusSIMD,https://github.com/stephanfr/Xoshiro256PlusSIMD,C++,xoshiro256+,AVX2,MIT,Low activity,Single-algorithm SIMD port
+EigenRand,https://github.com/bab2min/EigenRand,C++,various (PCG/xoshiro),AVX2/NEON,MIT,Active,Header-only; integrates with Eigen for vectorized distributions
+SFMT,https://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/,C,SFMT (Mersenne Twister SIMD),SSE2,Modified-BSD,Active,Classic SIMD Mersenne Twister variant
+PCG,https://www.pcg-random.org/,C/C++,pcg32/pcg64,Scalar only,Apache-2.0,Active,Reference high-quality scalar RNG family
+Random123,https://github.com/DEShawResearch/Random123,C/C++,Philox/Threefry,Counter-based (SIMD friendly),BSD,Active,Counter-based RNGs good for parallelism
+Intel-oneMKL-VSL,https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference/2021-1/basic-random-number-generators.html,C/C++,MT19937/Philox/MRG,SSE/AVX/AVX512,Intel EULA,Active,Production-grade SIMD RNGs in Intel MKL (heavyweight)
+Intel-SVRNG,https://www.intel.com/content/www/us/en/developer/articles/technical/short-vector-random-number-generator.html,C/ASM,xorshift/philox,AVX2/AVX512,Intel EULA,Active,Intrinsics-level short-vector RNGs (Intel stack)
+VectorizedRNG.jl,https://github.com/JuliaSIMD/VectorizedRNG.jl,Julia,xoshiro256++,AVX2/AVX512,MIT,Active,Proof-of-concept Julia SIMD RNGs
+simd-pcg (rust),https://github.com/suzusuzu/simd-pcg,Rust,pcg32/pcg64,AVX2/AVX512,MPL-2.0,Low activity,Rust example of PCG vectorisation
+Randen,https://github.com/google/randen,C++,AES-based RNG,AES-NI (SIMD),Apache-2.0,Active,Google's AES-based RNG leveraging AES instructions
+SFMT-dSFMT,https://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/,C,dSFMT (double),SSE2,Modified-BSD,Active,Double-precision SFMT variant
+this-UA-RNG,LOCAL,C++,xoshiro256**/normals (polar),AVX2/AVX512,hybrid,Active,this library (UA RNG v1.7) - runtime dispatch and jump()
