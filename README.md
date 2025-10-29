@@ -30,23 +30,30 @@ It consolidates CSV results, calculates throughput and variance deltas, and expo
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
 Usage
+```
 python plot-cross-platform-adv.py \
   --baseline windows-msvc \
   --multi-panel \
   --top3-table \
   --style paper \
   --output results/cross_compiler_full_report.pdf
+```
 
 Optional Flags
+```
 Flag	Description
 --baseline	Reference platform for relative % speedups
 --multi-panel	Enables 2×2 composite plot layout
 --top3-table	Exports results/top3_table.tex
 --style	Choose paper (default) or dark theme
 --output	Specify output file path
+```
+
 Directory Structure
+```
 simd-bench-visualizer/
 ├── plot-cross-platform-adv.py      # Main script
 ├── requirements.txt                # Dependencies
@@ -62,8 +69,10 @@ simd-bench-visualizer/
 ├── SECURITY.md
 ├── LICENSE
 └── README.md
+```
 
 Example Output
+```
 Multi-Panel Dashboard
 
 U64 & F64 throughput per generator
@@ -80,6 +89,7 @@ ASCII Table Example
 | std_mt19937_64   | 1200113371.71          | 692907957.14           | linux-gcc              |  73.20         |
 | minstd_rand      | 1182112151.14          | 1003158884.63          | linux-gcc              |  17.84         |
 +------------------+------------------------+------------------------+------------------------+----------------+
+```
 
 Requirements
 
