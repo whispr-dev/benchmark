@@ -1,94 +1,78 @@
+README.md
 # Cross-Platform SIMD RNG Benchmark Visualizer
 
-`plot-cross-platform-adv.py` is a standalone Python utility for visualizing and comparing
-SIMD-optimized RNG benchmark data across multiple compilers and operating systems.
-It aggregates CSV results, computes relative performance, and generates clean, publication-grade
-plots and tables.
+<img src="assets/benchmark-banner.png" width="600" alt="Cross-Platform SIMD RNG Benchmark Visualizer">
+
+_A high-precision visualization and analytics toolkit for multi-compiler, multi-OS RNG performance benchmarking._
 
 ---
 
-## **Features**
+## Overview
 
-- 🧮 **Multi-Panel Dashboard:** 2×2 layout for U64/F64 throughput, speedup %, and Δ-variance.
-- 📊 **Shared Legend + Perfect Layout:** automatic title/legend spacing, no overlaps.
-- 🧠 **Automatic Baseline Comparison:** relative speedup computed against any chosen platform.
-- 📈 **Top-3 LaTeX Table:** quick inclusion in academic or tech papers.
-- 🧾 **Full Markdown Comparison Report:**
-  - Pairwise platform comparisons for every compiler combo.
-  - Perfectly aligned ASCII tables inside code fences (` ```text ... ``` `).
-  - Auto-formatted numeric precision and percentage deltas.
+This project provides a **clean, extensible, and publication-grade benchmarking dashboard** for analyzing SIMD-optimized RNG performance across compilers and operating systems.
+
+It consolidates CSV results, calculates throughput and variance deltas, and exports clear visual and tabular reports for cross-comparison.
+
+### Core Highlights
+
+- 🧮 **2×2 Multi-Panel Dashboard** — U64/F64 throughput, Speedup %, Δ-Variance
+- 📊 **Automatic Baseline Comparison** — relative % improvement over a reference compiler
+- 🧾 **Aligned Markdown Reports** — perfect ASCII tables for GitHub or terminal use
+- 📈 **Top-3 LaTeX Export** — ready for paper or report inclusion
+- 🧠 **No LaTeX dependency** — pure Matplotlib PDF backend
+- ⚙️ **Consistent Cross-Platform Results** — stable across Linux, Windows, and MSYS2 builds
 
 ---
 
-## **Dependencies**
-
-Install requirements (Python ≥ 3.8):
+## Installation
 
 ```bash
-pip install pandas numpy matplotlib seaborn
-Input Format
-Place benchmark CSV files in a folder named results/.
-Each file must follow the pattern:
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
-php-template
-Copy code
-bench_all_<platform>.csv
-Each CSV must contain at least:
-
-Column	Description
-generator	RNG name (e.g., std_mt19937, pcg32, etc.)
-u64_ops_per_s	64-bit throughput (operations per second)
-f64_ops_per_s	64-bit floating throughput
-mean_f64	mean value for variance check
-var_f64	variance for Δ-variance calculation
-
-Example:
-
-cs
-Copy code
-generator,u64_ops_per_s,f64_ops_per_s,mean_f64,var_f64
-std_mt19937,495258380.79,222302489.77,0.5012,0.08331
-pcg32,791380129.36,331499760.45,0.4998,0.08337
 Usage
-bash
-Copy code
 python plot-cross-platform-adv.py \
   --baseline windows-msvc \
   --multi-panel \
   --top3-table \
   --style paper \
   --output results/cross_compiler_full_report.pdf
+
 Optional Flags
 Flag	Description
---baseline <name>	Choose reference platform for relative % computation
---multi-panel	Enable 2×2 composite figure (default: single plot)
---top3-table	Output results/top3_table.tex for LaTeX inclusion
---style paper / --style dark	Choose Seaborn theme
---output <file>	Specify PDF output path (SVG/PNG auto-generated too)
+--baseline	Reference platform for relative % speedups
+--multi-panel	Enables 2×2 composite plot layout
+--top3-table	Exports results/top3_table.tex
+--style	Choose paper (default) or dark theme
+--output	Specify output file path
+Directory Structure
+simd-bench-visualizer/
+├── plot-cross-platform-adv.py      # Main script
+├── requirements.txt                # Dependencies
+├── results/
+│   ├── bench_all_linux-gcc.csv
+│   ├── bench_all_windows-msvc.csv
+│   ├── cross_compiler_full_report.pdf
+│   ├── cross_compiler_full_report_all_comparisons_pretty.md
+│   └── top3_table.tex
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── SECURITY.md
+├── LICENSE
+└── README.md
 
-Outputs
-PDF Dashboard
-→ results/cross_compiler_full_report.pdf
-High-quality vector chart comparing all platforms.
+Example Output
+Multi-Panel Dashboard
 
-Top-3 LaTeX Table
-→ results/top3_table.tex
+U64 & F64 throughput per generator
 
-SVG/PNG Copies
-→ results/cross_compiler_full_report.svg / .png
+Speedup vs baseline
 
-Markdown Comparison Reports
+Δ Variance (%)
 
-results/cross_compiler_full_report_all_comparisons.md
-→ Standard Markdown tables.
-
-results/cross_compiler_full_report_all_comparisons_pretty.md
-→ Fully aligned ASCII tables inside code blocks.
-
-Example excerpt:
-
-text
-Copy code
+ASCII Table Example
 +------------------+------------------------+------------------------+------------------------+----------------+
 | Generator        | linux-gcc Read (Mops/s) | windows-msvc Read (Mops/s) | Winner                 | Advantage (%) |
 +------------------+------------------------+------------------------+------------------------+----------------+
@@ -96,40 +80,37 @@ Copy code
 | std_mt19937_64   | 1200113371.71          | 692907957.14           | linux-gcc              |  73.20         |
 | minstd_rand      | 1182112151.14          | 1003158884.63          | linux-gcc              |  17.84         |
 +------------------+------------------------+------------------------+------------------------+----------------+
-Best Practices
-Ensure all benchmarks use the same RNG ordering across CSVs.
 
-Normalize units before merging (use Mops/s for consistency).
+Requirements
 
-Keep filenames short and lowercase for clean legend entries.
+See requirements.txt
+:
 
-Use --style paper for academic graphs; --style dark for presentation.
+numpy>=1.26.0,<2.0.0
+pandas>=2.2.0,<3.0.0
+matplotlib>=3.8.0,<4.0.0
+seaborn>=0.13.0,<0.14.0
+cycler>=0.12.0
+fonttools>=4.40.0
+kiwisolver>=1.4.5
+pyparsing>=3.1.0
+Pillow>=10.0.0
+packaging>=23.0
 
-Known Good Baseline Examples
-Platform	Compiler	Typical Label
-Windows 11	MSVC 19.3x	windows-msvc
-Windows 11	MSVC + SIMD RNG v1.7	windows-msvc_csimd_v1_7
-Linux	GCC 13.x	linux-gcc
-Linux	Clang 17	linux-clang
-Linux	GCC + SIMD RNG v1.7	linux-gcc_csimd_v1_7
-MSYS2 (MinGW64)	GCC 13.x	windows-msys2
+Contributing
 
-Notes
-The script uses a pure-Matplotlib PDF backend — no LaTeX required.
-
-TrueType font embedding (pdf.fonttype = 42) ensures compatibility with vector editors.
-
-Uses modern Seaborn (≥ 0.13) for consistent palette handling.
+Pull requests and feature suggestions are welcome!
+See CONTRIBUTING.md
+ for coding style and workflow.
 
 License
+
 MIT License — (c) 2025 RYOModular / whisprer
-Use freely for research, reporting, and documentation.
+See LICENSE
+ for full text.
 
-Author
-Developed by woflfren / whisprer
-Rapid prototyping, performance engineering, cross-platform systems, and synthetic benchmarking specialist.
+Built with precision and pragmatism by woflfren
+“Benchmark everything. Optimize what matters.”
 
-yaml
-Copy code
 
 ---
