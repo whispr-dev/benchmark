@@ -124,9 +124,8 @@ ASCII Table Example
 
 Requirements
 
-See requirements.txt
-:
-
+See requirements.txt:
+```
 numpy>=1.26.0,<2.0.0
 
 pandas>=2.2.0,<3.0.0
@@ -146,6 +145,7 @@ pyparsing>=3.1.0
 Pillow>=10.0.0
 
 packaging>=23.0
+```
 
 Contributing
 
