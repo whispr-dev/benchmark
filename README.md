@@ -128,14 +128,23 @@ See requirements.txt
 :
 
 numpy>=1.26.0,<2.0.0
+
 pandas>=2.2.0,<3.0.0
+
 matplotlib>=3.8.0,<4.0.0
+
 seaborn>=0.13.0,<0.14.0
+
 cycler>=0.12.0
+
 fonttools>=4.40.0
+
 kiwisolver>=1.4.5
+
 pyparsing>=3.1.0
+
 Pillow>=10.0.0
+
 packaging>=23.0
 
 Contributing
