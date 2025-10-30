@@ -1,7 +1,38 @@
 README.md
+
 # Cross-Platform SIMD RNG Benchmark Visualizer
 
-<img src="assets/benchmark-banner.png" width="600" alt="Cross-Platform SIMD RNG Benchmark Visualizer">
+<p align="center">
+  <a href="https://doi.org/10.xxxx/zenodo.xxxxxx">
+    <img src="https://zenodo.org/badge/DOI/10.xxxx/zenodo.xxxxxx.svg" alt="DOI Badge">
+  </a>
+  <a href="https://github.com/whisprer/benchmark/releases">
+    <img src="https://img.shields.io/github/v/release/whisprer/benchmark?color=4CAF50&label=release" alt="Release Version">
+  </a>
+  <a href="https://github.com/whisprer/benchmark/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  </a>
+  <a href="https://github.com/whisprer/benchmark/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/whisprer/benchmark/lint-and-plot.yml?label=build" alt="Build Status">
+  </a>
+</p>
+
+![Commits](https://img.shields.io/github/commit-activity/m/whisprer/benchmark?label=commits)
+![Last Commit](https://img.shields.io/github/last-commit/whisprer/benchmark)
+![Issues](https://img.shields.io/github/issues/whisprer/benchmark)
+
+<p align="center">
+  <img src="competitor-overview.png" width="850" alt="SIMD RNG Competitor Overview">
+</p>
+
+Visual Summary
+
+Left panel: Quantifies “market position” by combining vector depth, openness, and activity.
+→ UA-RNG v1.7 sits at the top with the only full (3/3) composite rating.
+
+Right panel: Radar chart compares structural capability profiles.
+→ UA-RNG’s polygon covers every axis — the most balanced and complete project in the field.
+→ Intel SVRNG spikes hard on vector breadth but collapses on openness and transparency.
 
 _A high-precision visualization and analytics toolkit for multi-compiler, multi-OS RNG performance benchmarking._
 
@@ -118,6 +149,17 @@ License
 MIT License — (c) 2025 RYOModular / whisprer
 See LICENSE
  for full text.
+
+---
+
+[![DOI](https://zenodo.org/badge/DOI/10.xxxx/zenodo.xxxxxx.svg)](https://doi.org/10.xxxx/zenodo.xxxxxx)
+
+plaintext ref.
+
+whisprer, W. (2025). Cross-Platform SIMD RNG Benchmark Visualizer (Version 1.0.0) [Computer software]. 
+whisper.dev. https://github.com/whisprer/benchmark
+
+---
 
 Built with precision and pragmatism by woflfren
 “Benchmark everything. Optimize what matters.”
