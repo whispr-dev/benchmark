@@ -111,13 +111,43 @@ Speedup vs baseline
 Δ Variance (%)
 
 ASCII Table Example
-+------------------+------------------------+------------------------+------------------------+----------------+
++
+
++
+
++
+
++
+
++
+
+-+
 | Generator        | linux-gcc Read (Mops/s) | windows-msvc Read (Mops/s) | Winner                 | Advantage (%) |
-+------------------+------------------------+------------------------+------------------------+----------------+
++
+
++
+
++
+
++
+
++
+
+-+
 | std_mt19937      | 1014458959.86          | 495258380.79           | linux-gcc              | 104.83         |
 | std_mt19937_64   | 1200113371.71          | 692907957.14           | linux-gcc              |  73.20         |
 | minstd_rand      | 1182112151.14          | 1003158884.63          | linux-gcc              |  17.84         |
-+------------------+------------------------+------------------------+------------------------+----------------+
++
+
++
+
++
+
++
+
++
+
+-+
 ```
 
 Requirements
@@ -161,6 +191,5 @@ whisper.dev. https://github.com/whisprer/benchmark
 
 Built with precision and pragmatism by woflfren
 “Benchmark everything. Optimize what matters.”
-
 
 ---
